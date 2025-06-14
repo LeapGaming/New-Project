@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeapStore</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Poppins:wght@500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f4f7fa;
+            --text-color: #1a1a1a;
+            --card-bg: #ffffff;
+            --border-color: #e0e4e8;
+            --banner-bg: linear-gradient(135deg, #4CAF50, #2e7d32);
+            --nav-bg: linear-gradient(135deg, #2c3e50, #1a252f);
+            --footer-bg: linear-gradient(135deg, #2c3e50, #1a252f);
+            --button-bg: #4CAF50;
+            --button-hover: #388E3C;
+            --accent-color: #4CAF50;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1c2526;
+            --text-color: #e0e0e0;
+            --card-bg: #2a2e2e;
+            --border-color: #3a3f44;
+            --banner-bg: linear-gradient(135deg, #2e7d32, #1b5e20);
+            --nav-bg: linear-gradient(135deg, #1a252f, #0f1419);
+            --footer-bg: linear-gradient(135deg, #1a252f, #0f1419);
+            --button-bg: #388E3C;
+            --button-hover: #2e7d32;
+            --accent-color: #388E3C;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        nav {
+            background: var(--nav-bg);
+            padding: 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        #theme-toggle {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-left: auto;
+            transition: transform 0.2s ease;
+        }
+
+        #theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .banner {
+            background: var(--banner-bg);
+            color: white;
+            text-align: center;
+            padding: 3rem 1rem;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .banner h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .banner p {
+            font-size: 1.2rem;
+        }
+
+        /* Featured Products */
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-card img {
+            max-width: 100%;
+            height: 180px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .product-card h3 {
+            font-family: 'Poppins', sans-serif;
+            margin: 0.8rem 0;
+            font-size: 1.3rem;
+        }
+
+        .product-card p {
+            color: var(--text-color);
+            font-size: 1.1rem;
+        }
+
+        .product-card button {
+            background-color: var(--button-bg);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .product-card button:hover {
+            background-color: var(--button-hover);
+            transform: scale(1.05);
+        }
+
+        /* Products Page */
+        .filters {
+            padding: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filters select {
+            padding: 0.75rem;
+            font-size: 1rem;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Roboto', sans-serif;
+            transition: border-color 0.3s ease;
+        }
+
+        .filters select:focus {
+            border-color: var(--accent-color);
+            outline: none;
+        }
+
+        /* Cart Page */
+        .cart-items {
+            max-width: 1200px;
+            margin: 1.5rem auto;
+            padding: 1.5rem;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.2rem 0;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .cart-item:hover {
+            transform: translateX(5px);
+        }
+
+        .cart-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            border-radius: 5px;
+        }
+
+        .cart-item span {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .cart-item button {
+            background-color: #e53935;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .cart-item button:hover {
+            background-color: #c62828;
+            transform: scale(1.05);
+        }
+
+        .cart-total {
+            text-align: right;
+            padding: 1.5rem;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .checkout-btn {
+            display: block;
+            margin: 1.5rem auto;
+            padding: 1rem 3rem;
+            background: var(--button-bg);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .checkout-btn:hover {
+            background: var(--button-hover);
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--footer-bg);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .social-icons {
+            margin-top: 1rem;
+        }
+
+        .social-icons a {
+            color: white;
+            margin: 0 1rem;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+
+        .social-icons a:hover {
+            color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+
+        /* Alert */
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--button-bg);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            display: none;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        /* Page Transitions */
+        .page {
+            transition: opacity 0.3s ease;
+        }
+
+        .page[style*="display: none"] {
+            opacity: 0;
+        }
+
+        .page[style*="display: block"] {
+            opacity: 1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            #theme-toggle {
+                margin-left: 0;
+            }
+
+            .banner h1 {
+                font-size: 1.8rem;
+            }
+
+            .banner p {
+                font-size: 1rem;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .cart-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="#home" onclick="showPage('home')">Home</a></li>
+            <li><a href="#products" onclick="showPage('products')">Products</a></li>
+            <li><a href="#cart" onclick="showPage('cart')">Cart</a></li>
+        </ul>
+        <button id="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+    </nav>
+
+    <div id="home" class="page">
+        <div class="banner">
+            <h1>Welcome to LeapStore !</h1>
+            <p>Everything of Part of Computer in This Store</p>
+        </div>
+        <div class="featured-grid" id="featured-products">
+            <!-- Featured products will be populated by JS -->
+        </div>
+    </div>
+
+    <div id="products" class="page" style="display: none;">
+        <div class="filters">
+            <select id="type-filter" onchange="filterProducts()">
+                <option value="all">All Types</option>
+                <option value="CPU">CPU</option>
+                <option value="GPU">GPU</option>
+                <option value="RAM">RAM</option>
+                <option value="SSD">SSD</option>
+            </select>
+            <select id="brand-filter" onchange="filterProducts()">
+                <option value="all">All Brands</option>
+                <option value="Intel">Intel</option>
+                <option value="AMD">AMD</option>
+                <option value="NVIDIA">NVIDIA</option>
+                <option value="Samsung">Samsung</option>
+            </select>
+            <select id="sort-price" onchange="sortProducts()">
+                <option value="none">Sort by Price</option>
+                <option value="low-high">Low to High</option>
+                <option value="high-low">High to Low</option>
+            </select>
+        </div>
+        <div class="featured-grid" id="product-list">
+            <!-- All products will be populated by JS -->
+        </div>
+    </div>
+
+    <div id="cart" class="page" style="display: none;">
+        <div class="cart-items" id="cart-items">
+            <!-- Cart items will be populated by JS -->
+        </div>
+        <div class="cart-total" id="cart-total">Total: $0.00</div>
+        <button class="checkout-btn" onclick="checkout()">Checkout</button>
+    </div>
+
+    <div class="alert" id="cart-alert">Item added to cart!</div>
+
+    <footer>
+        <p>Contact us: leapgame1@gmail.com | Tell : 069 65 01 91</p>
+        <div class="social-icons">
+            <a href="https://web.facebook.com/callme.leap">Facebook</a>
+            <a href="https://t.me/Leap1414">Telegram</a>
+            <a href="https://www.instagram.com/callmeleap/?hl=en">Instagram</a>
+        </div>
+    </footer>
+
+    <script>
+        const products = [
+            { id: 1, name: "Intel Core i9-13900K", type: "CPU", brand: "Intel", price: 599.99, image: "/img/Intel Core I9.jpg" },
+            { id: 2, name: "AMD Ryzen 9 7950X", type: "CPU", brand: "AMD", price: 699.99, image: "/img/AMD-Ryzen-9-7950X.jpg" },
+            { id: 3, name: "NVIDIA RTX 4090", type: "GPU", brand: "NVIDIA", price: 1599.99, image: "/img/Nvidia RTX 4090.jpg" },
+            { id: 4, name: "Samsung 32GB DDR5", type: "RAM", brand: "Samsung", price: 149.99, image: "/img/Samsung 32GB DDR5L.jpg" },
+            { id: 5, name: "Samsung 1TB 990 Pro SSD", type: "SSD", brand: "Samsung", price: 129.99, image: "/img/SamsungSSD990PRO_main1.jpg" },
+            { id: 6, name: "Intel Core i5-13400", type: "CPU", brand: "Intel", price: 229.99, image: "/img/Intel Core i5.jpg" },
+            { id: 7, name: "AMD RX 7900 XTX", type: "GPU", brand: "AMD", price: 999.99, image: "/img/AMD RX 7900 XTX.jpg" },
+            { id: 8, name: "NVIDIA RTX 3060 Ti", type: "GPU", brand: "NVIDIA", price: 329.99, image: "/img/NVIDIA-GeForce-RTX-3060-Ti.jpeg" },
+            { id: 9, name: "Intel Core i7-13700K", type: "CPU", brand: "Intel", price: 419.99, image: "/img/Intel Core i7.jpg " },
+            { id: 10, name: "AMD Ryzen 7 7800X", type: "CPU", brand: "AMD", price: 449.99, image: "/img/AMD Ryzen 7 7800X.jpg" },
+            { id: 11, name: "NVIDIA RTX 4080", type: "GPU", brand: "NVIDIA", price: 1199.99, image: "/img/NVIDIA RTX 4080.jpg" },
+            { id: 12, name: "Samsung 16GB DDR4", type: "RAM", brand: "Samsung", price: 79.99, image: "/img/Samsung 16GB DDR4.jpg" },
+            { id: 13, name: "Samsung 2TB 980 Pro SSD", type: "SSD", brand: "Samsung", price: 249.99, image: "/img/Samsung 2TB 980 Pro SSD.jpg" },
+            { id: 14, name: "AMD Ryzen 5 7600X", type: "CPU", brand: "AMD", price: 299.99, image: "/img/AMD Ryzen 5 7600X.jpg" },
+            { id: 15, name: "NVIDIA RTX 3070", type: "GPU", brand: "NVIDIA", price: 499.99, image: "/img/NVIDIA RTX 3070.jpg" }
+        ];
+
+        let cart = [];
+
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const button = document.getElementById('theme-toggle');
+            
+            if (currentTheme === 'dark') {
+                body.removeAttribute('data-theme');
+                button.textContent = '🌙 Dark Mode';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                button.textContent = '☀️ Light Mode';
+            }
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.style.display = 'none');
+            document.getElementById(pageId).style.display = 'block';
+            if (pageId === 'home') renderFeaturedProducts();
+            if (pageId === 'products') renderProducts();
+            if (pageId === 'cart') renderCart();
+        }
+
+        function renderFeaturedProducts() {
+            const featured = products.slice(0, 6); // Updated to show 6 featured products
+            const container = document.getElementById('featured-products');
+            container.innerHTML = featured.map(product => `
+                <div class="product-card">
+                    <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/150?text=${product.type}'">
+                    <h3>${product.name}</h3>
+                    <p>$${product.price.toFixed(2)}</p>
+                    <button onclick="addToCart(${product.id})">Add to Cart</button>
+                </div>
+            `).join('');
+        }
+
+        function renderProducts() {
+            const typeFilter = document.getElementById('type-filter').value;
+            const brandFilter = document.getElementById('brand-filter').value;
+            const sortPrice = document.getElementById('sort-price').value;
+
+            let filteredProducts = [...products];
+
+            if (typeFilter !== 'all') {
+                filteredProducts = filteredProducts.filter(p => p.type === typeFilter);
+            }
+
+            if (brandFilter !== 'all') {
+                filteredProducts = filteredProducts.filter(p => p.brand === brandFilter);
+            }
+
+            if (sortPrice === 'low-high') {
+                filteredProducts.sort((a, b) => a.price - b.price);
+            } else if (sortPrice === 'high-low') {
+                filteredProducts.sort((a, b) => b.price - a.price);
+            }
+
+            const container = document.getElementById('product-list');
+            container.innerHTML = filteredProducts.map(product => `
+                <div class="product-card">
+                    <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/150?text=${product.type}'">
+                    <h3>${product.name}</h3>
+                    <p>$${product.price.toFixed(2)}</p>
+                    <button onclick="addToCart(${product.id})">Add to Cart</button>
+                </div>
+            `).join('');
+        }
+
+        function filterProducts() {
+            renderProducts();
+        }
+
+        function sortProducts() {
+            renderProducts();
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const cartItem = cart.find(item => item.id === productId);
+
+            if (cartItem) {
+                cartItem.quantity++;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            const alert = document.getElementById('cart-alert');
+            alert.style.display = 'block';
+            setTimeout(() => alert.style.display = 'none', 2000);
+
+            renderCart();
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            renderCart();
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-items');
+            container.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <img src="${item.image}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/50?text=${item.type}'">
+                    <span>${item.name}</span>
+                    <span>$${item.price.toFixed(2)} x ${item.quantity}</span>
+                    <button onclick="removeFromCart(${item.id})">Remove</button>
+                </div>
+            `).join('');
+
+            const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            document.getElementById('cart-total').textContent = `Total: $${total.toFixed(2)}`;
+        }
+
+        function checkout() {
+            const totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            const formattedAmount = totalAmount.toFixed(2);
+
+            const abaLink = `https://pay.ababank.com/bW2uBpbP5AiyTBgV9?amount=${formattedAmount}`;
+
+            cart = [];
+            renderCart();
+
+            alert(`You will be redirected to ABA to pay $${formattedAmount}`);
+            window.location.href = abaLink;
+        }
+
+        // Initialize home page
+        showPage('home');
+    </script>
+</body>
+</html>
